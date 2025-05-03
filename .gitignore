@@ -1,0 +1,39 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# Mac / Linux
+.DS_Store
+*.swp
+
+# Logs
+*.log
+
+# ASP.NET
+*.db
+*.pdb
+*.mdb
+
+# Config
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# Migrations/scripts (se sensíveis ou gerados)
+Migrations/Scripts/*.sql
+
+# Optional: ignore tools output
+tools/
+*.bak
