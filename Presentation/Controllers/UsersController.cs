@@ -3,6 +3,7 @@ namespace Igloo.Controllers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Igloo.UseCases.Users.CreateUser;
+using Igloo.UseCases.Users.GetUserById;
 
 [ApiController]
 [Route("api/v1/users")]
@@ -25,6 +26,9 @@ public class UsersController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUserById(long id, CancellationToken cancellationToken)
     {
-        return Ok();
+        var user = await _mediator.Send(new GetUserByIdQuery(id), cancellationToken);
+        if (user is null)
+            return NotFound();
+        return Ok(user);
     }
 }
