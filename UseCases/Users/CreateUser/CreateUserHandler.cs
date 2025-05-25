@@ -1,10 +1,10 @@
-namespace UseCases.Users.CreateUser;
+namespace Igloo.UseCases.Users.CreateUser;
 
 using MediatR;
 using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
-using Infrastructure.Persistence;
-using Domain.Entities;
+using Igloo.Infrastructure.Persistence;
+using Igloo.Domain.Entities;
 using FluentValidation;
 
 public class CreateUserHandler : IRequestHandler<CreateUserCommand, long>

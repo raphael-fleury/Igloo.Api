@@ -1,4 +1,4 @@
-namespace Domain.Enums;
+namespace Igloo.Domain.Enums;
 
 public enum PostVisibility
 {

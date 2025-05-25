@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using Infrastructure.Persistence;
-using UseCases.Users.CreateUser;
 using FluentValidation;
 using MediatR;
-using Middlewares;
+
+using Igloo.Infrastructure.Persistence;
+using Igloo.UseCases.Users.CreateUser;
+using Igloo.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 

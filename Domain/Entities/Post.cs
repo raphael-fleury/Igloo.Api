@@ -1,6 +1,6 @@
-using Domain.Enums;
+namespace Igloo.Domain.Entities;
 
-namespace Domain.Entities;
+using Igloo.Domain.Enums;
 
 public class Post
 {

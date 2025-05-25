@@ -1,8 +1,8 @@
-namespace Controllers;
+namespace Igloo.Controllers;
 
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using UseCases.Users.CreateUser;
+using Igloo.UseCases.Users.CreateUser;
 
 [ApiController]
 [Route("api/v1/users")]

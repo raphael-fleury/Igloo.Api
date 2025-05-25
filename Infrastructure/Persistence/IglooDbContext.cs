@@ -1,6 +1,6 @@
-namespace Infrastructure.Persistence;
+namespace Igloo.Infrastructure.Persistence;
 
-using Domain.Entities;
+using Igloo.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 public class IglooDbContext : DbContext

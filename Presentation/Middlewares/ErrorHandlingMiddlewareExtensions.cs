@@ -1,4 +1,4 @@
-namespace Middlewares;
+namespace Igloo.Middlewares;
 
 public static class ErrorHandlingMiddlewareExtensions
 {

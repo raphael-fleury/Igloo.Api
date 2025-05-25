@@ -1,4 +1,4 @@
-namespace Domain.Entities;
+namespace Igloo.Domain.Entities;
 
 public class Group
 {
