@@ -18,15 +18,8 @@ public class UsersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command, CancellationToken cancellationToken)
     {
-        try
-        {
-            var userId = await _mediator.Send(command, cancellationToken);
-            return CreatedAtAction(nameof(GetUserById), new { id = userId }, new { id = userId });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
+        var userId = await _mediator.Send(command, cancellationToken);
+        return CreatedAtAction(nameof(GetUserById), new { id = userId }, new { id = userId });
     }
 
     [HttpGet("{id}")]

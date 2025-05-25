@@ -3,6 +3,7 @@ using Infrastructure.Persistence;
 using UseCases.Users.CreateUser;
 using FluentValidation;
 using MediatR;
+using Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseErrorHandling();
 app.MapControllers();
 app.UseHttpsRedirection();
 await app.RunAsync();
