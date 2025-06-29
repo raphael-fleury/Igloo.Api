@@ -22,11 +22,6 @@ public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, UserDto?>
 
         if (user is null) return null;
 
-        return new UserDto
-        {
-            Id = user.Id,
-            Email = user.Email,
-            CreatedAt = user.CreatedAt
-        };
+        return new UserDto(user.Id, user.Email, user.CreatedAt);
     }
 }
