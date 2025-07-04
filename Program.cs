@@ -7,6 +7,7 @@ using Igloo.Infrastructure.Services;
 using Igloo.UseCases.Users.CreateUser;
 using Igloo.Middlewares;
 using Igloo.Presentation.Middlewares;
+using Igloo.Presentation.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,7 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerWithAuth();
 
 var app = builder.Build();
 
