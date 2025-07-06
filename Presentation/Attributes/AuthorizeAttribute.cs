@@ -17,12 +17,10 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
             return;
         }
 
-        // Verificar se o usuário tem um ID válido
         var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
         if (userIdClaim == null || !long.TryParse(userIdClaim.Value, out _))
         {
             context.Result = new UnauthorizedResult();
-            return;
         }
     }
 } 

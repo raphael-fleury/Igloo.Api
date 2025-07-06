@@ -16,6 +16,7 @@ builder.Services.AddDbContext<IglooDbContext>(options =>
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddValidatorsFromAssembly(typeof(CreateUserCommandValidator).Assembly);
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IProfileContextService, ProfileContextService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

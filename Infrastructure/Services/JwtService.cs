@@ -9,8 +9,10 @@ using Microsoft.IdentityModel.Tokens;
 public interface IJwtService
 {
     string GenerateToken(long userId, string email);
+    string GenerateToken(long userId, string email, long? activeProfileId);
     string GenerateRefreshToken();
     ClaimsPrincipal? ValidateToken(string token);
+    long? GetActiveProfileId(ClaimsPrincipal principal);
 }
 
 public class JwtService : IJwtService
@@ -22,7 +24,7 @@ public class JwtService : IJwtService
 
     public JwtService(IConfiguration configuration)
     {
-        _secretKey = configuration["Jwt:SecretKey"] ?? throw new ArgumentNullException("Jwt:SecretKey");
+        _secretKey = configuration["Jwt:SecretKey"] ?? throw new ArgumentNullException(nameof(configuration), "Jwt:SecretKey");
         _issuer = configuration["Jwt:Issuer"] ?? "IglooApi";
         _audience = configuration["Jwt:Audience"] ?? "IglooUsers";
         _expirationMinutes = int.Parse(configuration["Jwt:ExpirationMinutes"] ?? "60");
@@ -30,16 +32,26 @@ public class JwtService : IJwtService
 
     public string GenerateToken(long userId, string email)
     {
+        return GenerateToken(userId, email, null);
+    }
+
+    public string GenerateToken(long userId, string email, long? activeProfileId)
+    {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_secretKey);
 
-        var claims = new[]
+        var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
             new Claim(ClaimTypes.Email, email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
         };
+
+        if (activeProfileId.HasValue)
+        {
+            claims.Add(new Claim("active_profile_id", activeProfileId.Value.ToString()));
+        }
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -79,7 +91,7 @@ public class JwtService : IJwtService
                 ValidAudience = _audience,
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
-            }, out SecurityToken validatedToken);
+            }, out _);
 
             return principal;
         }
@@ -88,4 +100,14 @@ public class JwtService : IJwtService
             return null;
         }
     }
-} 
+
+    public long? GetActiveProfileId(ClaimsPrincipal principal)
+    {
+        var profileIdClaim = principal.FindFirst("active_profile_id");
+        if (profileIdClaim != null && long.TryParse(profileIdClaim.Value, out var profileId))
+        {
+            return profileId;
+        }
+        return null;
+    }
+}
