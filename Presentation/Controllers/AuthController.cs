@@ -42,4 +42,25 @@ public class AuthController : ControllerBase
             return NotFound(new ErrorResponse { Message = ex.Message });
         }
     }
+
+    /// <summary>
+    /// Gets information about the authenticated user
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>Current user information</returns>
+    /// <response code="200">User found</response>
+    /// <response code="401">User not authenticated</response>
+    [HttpGet("me")]
+    [Authorize]
+    [ProducesResponseType(typeof(CurrentUserResponse), 200)]
+    [ProducesResponseType(typeof(ErrorResponse), 401)]
+    public async Task<IActionResult> GetCurrentUser(CancellationToken cancellationToken)
+    {
+        var user = await _mediator.Send(new GetCurrentUserQuery(), cancellationToken);
+        
+        if (user == null)
+            return Unauthorized(new ErrorResponse { Message = "User not authenticated" });
+
+        return Ok(user);
+    }
 } 

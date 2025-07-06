@@ -1,5 +1,6 @@
 namespace Igloo.Presentation.Attributes;
 
+using Igloo.Presentation.Controllers.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
@@ -13,14 +14,14 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 
         if (!user.Identity?.IsAuthenticated ?? true)
         {
-            context.Result = new UnauthorizedResult();
+            context.Result = new UnauthorizedObjectResult(new { Message = "User not authenticated" });
             return;
         }
 
         var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
         if (userIdClaim == null || !long.TryParse(userIdClaim.Value, out _))
         {
-            context.Result = new UnauthorizedResult();
+            context.Result = new UnauthorizedObjectResult(new { Message = "User not authenticated" });
         }
     }
 } 
