@@ -1,6 +1,7 @@
 namespace Igloo.Middlewares;
 
 using FluentValidation;
+using Igloo.Presentation.Controllers.Dtos;
 
 public class ErrorHandlingMiddleware
 {
@@ -24,10 +25,9 @@ public class ErrorHandlingMiddleware
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             context.Response.ContentType = "application/json";
 
-            var errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
-            await context.Response.WriteAsJsonAsync(new { errors });
-
-            _logger.LogWarning("Validation error: {Errors}", errors);
+            await context.Response.WriteAsJsonAsync(
+                new ValidationErrorResponse(ex)
+            );
         }
         catch (Exception ex)
         {
@@ -38,5 +38,13 @@ public class ErrorHandlingMiddleware
 
             _logger.LogError(ex, "Unhandled exception");
         }
+    }
+}
+
+public static class ErrorHandlingMiddlewareExtensions
+{
+    public static IApplicationBuilder UseErrorHandling(this IApplicationBuilder builder)
+    {
+        return builder.UseMiddleware<ErrorHandlingMiddleware>();
     }
 }
