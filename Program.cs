@@ -8,11 +8,13 @@ using Igloo.UseCases.Users.CreateUser;
 using Igloo.Middlewares;
 using Igloo.Presentation.Middlewares;
 using Igloo.Presentation.Extensions;
+using Igloo.Infrastructure.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<IglooDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
 builder.Services.AddMediatR(typeof(Program).Assembly);
 builder.Services.AddValidatorsFromAssembly(typeof(CreateUserCommandValidator).Assembly);
 builder.Services.AddScoped<IJwtService, JwtService>();
