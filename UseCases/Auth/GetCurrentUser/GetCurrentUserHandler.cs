@@ -4,16 +4,19 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Igloo.Infrastructure.Persistence;
 using System.Security.Claims;
+using AutoMapper;
 
 public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserQuery, CurrentUserResponse?>
 {
     private readonly IglooDbContext _db;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IMapper _mapper;
 
-    public GetCurrentUserHandler(IglooDbContext db, IHttpContextAccessor httpContextAccessor)
+    public GetCurrentUserHandler(IglooDbContext db, IHttpContextAccessor httpContextAccessor, IMapper mapper)
     {
         _db = db;
         _httpContextAccessor = httpContextAccessor;
+        _mapper = mapper;
     }
 
     public async Task<CurrentUserResponse?> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
@@ -29,10 +32,6 @@ public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserQuery, Curren
         if (user == null)
             return null;
 
-        return new CurrentUserResponse(
-            Id: user.Id,
-            Email: user.Email,
-            CreatedAt: user.CreatedAt
-        );
+        return _mapper.Map<CurrentUserResponse>(user);
     }
 } 
