@@ -10,8 +10,8 @@ public class CreateProfileCommandValidator : AbstractValidator<CreateProfileComm
             .NotEmpty()
             .MinimumLength(3)
             .MaximumLength(24)
-            .Matches("^[a-zA-Z0-9_]+$")
-            .WithMessage("Username must contain only letters, numbers and underscore");
+            .Matches("^[a-zA-Z0-9_.]+$")
+            .WithMessage("Username must contain only letters, numbers, dot and underscore");
 
         RuleFor(x => x.DisplayName)
             .NotEmpty()
