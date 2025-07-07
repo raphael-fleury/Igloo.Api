@@ -29,21 +29,16 @@ public class ProfilesController : ControllerBase
     /// <response code="201">Profile created successfully</response>
     /// <response code="400">Invalid input data</response>
     /// <response code="401">User not authenticated</response>
+    /// <response code="409">Username already in use</response>
     [HttpPost]
     [ProducesResponseType(typeof(ProfileDto), 201)]
     [ProducesResponseType(typeof(ValidationErrorResponse), 400)]
     [ProducesResponseType(typeof(ErrorResponse), 401)]
+    [ProducesResponseType(typeof(ErrorResponse), 409)]
     public async Task<IActionResult> CreateProfile([FromBody] CreateProfileCommand command, CancellationToken cancellationToken)
     {
-        try
-        {
-            var profileId = await _mediator.Send(command, cancellationToken);
-            return CreatedAtAction(nameof(GetProfileById), new { id = profileId }, new { id = profileId });
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
+        var profileId = await _mediator.Send(command, cancellationToken);
+        return CreatedAtAction(nameof(GetProfileById), new { id = profileId }, new { id = profileId });
     }
 
     /// <summary>

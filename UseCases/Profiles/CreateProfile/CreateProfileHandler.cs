@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Igloo.Infrastructure.Persistence;
 using Igloo.Domain.Entities;
 using FluentValidation;
+using Igloo.Domain.Exceptions;
 
 public class CreateProfileHandler : IRequestHandler<CreateProfileCommand, long>
 {
@@ -23,7 +24,7 @@ public class CreateProfileHandler : IRequestHandler<CreateProfileCommand, long>
         
         bool usernameExists = await _db.Profiles.AnyAsync(p => p.Username == request.Username, cancellationToken);
         if (usernameExists)
-            throw new ArgumentException("Username already in use");
+            throw new ConflictException("Username already in use");
 
         var profile = new Profile
         {

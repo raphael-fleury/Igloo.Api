@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Igloo.Infrastructure.Persistence;
 using Igloo.Domain.Entities;
 using FluentValidation;
+using Igloo.Domain.Exceptions;
 
 public class CreateUserHandler : IRequestHandler<CreateUserCommand, long>
 {
@@ -23,7 +24,7 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, long>
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
         bool exists = await _db.Users.AnyAsync(u => u.Email == request.Email, cancellationToken);
         if (exists)
-            throw new Exception("Email já cadastrado");
+            throw new ConflictException("Email already in use");
 
         var user = new User
         {

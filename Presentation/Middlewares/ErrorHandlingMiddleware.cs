@@ -2,6 +2,7 @@ namespace Igloo.Middlewares;
 
 using FluentValidation;
 using Igloo.Presentation.Controllers.Dtos;
+using Igloo.Domain.Exceptions;
 
 public class ErrorHandlingMiddleware
 {
@@ -27,6 +28,15 @@ public class ErrorHandlingMiddleware
 
             await context.Response.WriteAsJsonAsync(
                 new ValidationErrorResponse(ex)
+            );
+        }
+        catch (ConflictException ex)
+        {
+            context.Response.StatusCode = StatusCodes.Status409Conflict;
+            context.Response.ContentType = "application/json";
+
+            await context.Response.WriteAsJsonAsync(
+                new ErrorResponse { Message = ex.Message }
             );
         }
         catch (Exception ex)
