@@ -1,4 +1,4 @@
-namespace Igloo.UseCases.Auth.Login;
+namespace Igloo.Features.Auth.Login;
 
 public record LoginResponse(
     string Token,

@@ -1,4 +1,4 @@
-namespace Igloo.UseCases.Users.CreateUser;
+namespace Igloo.Features.Users.CreateUser;
 
 using MediatR;
 

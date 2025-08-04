@@ -2,9 +2,9 @@ namespace Igloo.Controllers;
 
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Igloo.UseCases.Users.CreateUser;
-using Igloo.UseCases.Users.GetUserById;
-using Igloo.UseCases.Users.Dtos;
+using Igloo.Features.Users.CreateUser;
+using Igloo.Features.Users.GetUserById;
+using Igloo.Features.Users.Dtos;
 using Igloo.Presentation.Controllers.Dtos;
 
 [ApiController]

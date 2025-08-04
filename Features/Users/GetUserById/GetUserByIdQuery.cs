@@ -1,6 +1,6 @@
-namespace Igloo.UseCases.Users.GetUserById;
+namespace Igloo.Features.Users.GetUserById;
 
 using MediatR;
-using Igloo.UseCases.Users.Dtos;
+using Igloo.Features.Users.Dtos;
 
 public record GetUserByIdQuery(long Id) : IRequest<UserDto?>;

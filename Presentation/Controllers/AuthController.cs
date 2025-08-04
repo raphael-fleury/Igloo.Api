@@ -2,8 +2,8 @@ namespace Igloo.Controllers;
 
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Igloo.UseCases.Auth.Login;
-using Igloo.UseCases.Auth.GetCurrentUser;
+using Igloo.Features.Auth.Login;
+using Igloo.Features.Auth.GetCurrentUser;
 using Igloo.Presentation.Attributes;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Igloo.Presentation.Controllers.Dtos;

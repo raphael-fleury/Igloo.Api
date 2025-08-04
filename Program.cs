@@ -4,7 +4,7 @@ using MediatR;
 
 using Igloo.Infrastructure.Persistence;
 using Igloo.Infrastructure.Services;
-using Igloo.UseCases.Users.CreateUser;
+using Igloo.Features.Users.CreateUser;
 using Igloo.Middlewares;
 using Igloo.Presentation.Middlewares;
 using Igloo.Presentation.Extensions;

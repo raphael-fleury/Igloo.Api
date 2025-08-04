@@ -1,7 +1,7 @@
 using AutoMapper;
 using Igloo.Domain.Entities;
-using Igloo.UseCases.Auth.GetCurrentUser;
-using Igloo.UseCases.Profiles.Dtos;
+using Igloo.Features.Auth.GetCurrentUser;
+using Igloo.Features.Profiles.Dtos;
 
 namespace Igloo.Infrastructure.Mapping;
 

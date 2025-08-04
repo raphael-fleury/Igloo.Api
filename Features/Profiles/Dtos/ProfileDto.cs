@@ -1,4 +1,4 @@
-namespace Igloo.UseCases.Profiles.Dtos;
+namespace Igloo.Features.Profiles.Dtos;
 
 public record ProfileDto(
     long Id,

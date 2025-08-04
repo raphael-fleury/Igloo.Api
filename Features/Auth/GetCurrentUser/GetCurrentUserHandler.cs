@@ -1,4 +1,4 @@
-namespace Igloo.UseCases.Auth.GetCurrentUser;
+namespace Igloo.Features.Auth.GetCurrentUser;
 
 using MediatR;
 using Microsoft.EntityFrameworkCore;

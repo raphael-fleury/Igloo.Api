@@ -1,4 +1,4 @@
-namespace Igloo.UseCases.Profiles.CreateProfile;
+namespace Igloo.Features.Profiles.CreateProfile;
 
 using MediatR;
 

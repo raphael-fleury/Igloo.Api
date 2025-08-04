@@ -2,9 +2,9 @@ namespace Igloo.Controllers;
 
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Igloo.UseCases.Profiles.CreateProfile;
+using Igloo.Features.Profiles.CreateProfile;
 using Igloo.Presentation.Attributes;
-using Igloo.UseCases.Profiles.Dtos;
+using Igloo.Features.Profiles.Dtos;
 using Igloo.Presentation.Controllers.Dtos;
 
 

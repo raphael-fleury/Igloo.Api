@@ -1,4 +1,4 @@
-namespace Igloo.UseCases.Auth.GetCurrentUser;
+namespace Igloo.Features.Auth.GetCurrentUser;
 
 public record CurrentUserResponse(
     long Id,
