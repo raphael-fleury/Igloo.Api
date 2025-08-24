@@ -5,18 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Igloo.Infrastructure.Persistence;
 using Igloo.Features.Users.Dtos;
 
-public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, UserDto?>
+public class GetUserByIdHandler(IglooDbContext dbContext) : IRequestHandler<GetUserByIdQuery, UserDto?>
 {
-    private readonly IglooDbContext _dbContext;
-
-    public GetUserByIdHandler(IglooDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async Task<UserDto?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _dbContext.Users
+        var user = await dbContext.Users
             .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
 

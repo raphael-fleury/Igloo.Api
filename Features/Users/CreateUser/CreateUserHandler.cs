@@ -8,21 +8,12 @@ using Igloo.Domain.Entities;
 using FluentValidation;
 using Igloo.Domain.Exceptions;
 
-public class CreateUserHandler : IRequestHandler<CreateUserCommand, long>
+public class CreateUserHandler(IglooDbContext db, IValidator<CreateUserCommand> validator) : IRequestHandler<CreateUserCommand, long>
 {
-    private readonly IglooDbContext _db;
-    private readonly IValidator<CreateUserCommand> _validator;
-
-    public CreateUserHandler(IglooDbContext db, IValidator<CreateUserCommand> validator)
-    {
-        _db = db;
-        _validator = validator;
-    }
-
     public async Task<long> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        await _validator.ValidateAndThrowAsync(request, cancellationToken);
-        bool exists = await _db.Users.AnyAsync(u => u.Email == request.Email, cancellationToken);
+        await validator.ValidateAndThrowAsync(request, cancellationToken);
+        bool exists = await db.Users.AnyAsync(u => u.Email == request.Email, cancellationToken);
         if (exists)
             throw new ConflictException("Email already in use");
 
@@ -33,8 +24,8 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, long>
             CreatedAt = DateTime.UtcNow
         };
 
-        _db.Users.Add(user);
-        await _db.SaveChangesAsync(cancellationToken);
+        db.Users.Add(user);
+        await db.SaveChangesAsync(cancellationToken);
 
         return user.Id;
     }

@@ -7,22 +7,13 @@ using Igloo.Domain.Entities;
 using FluentValidation;
 using Igloo.Domain.Exceptions;
 
-public class CreateProfileHandler : IRequestHandler<CreateProfileCommand, long>
+public class CreateProfileHandler(IglooDbContext db, IValidator<CreateProfileCommand> validator) : IRequestHandler<CreateProfileCommand, long>
 {
-    private readonly IglooDbContext _db;
-    private readonly IValidator<CreateProfileCommand> _validator;
-
-    public CreateProfileHandler(IglooDbContext db, IValidator<CreateProfileCommand> validator)
-    {
-        _db = db;
-        _validator = validator;
-    }
-
     public async Task<long> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
     {
-        await _validator.ValidateAndThrowAsync(request, cancellationToken);
+        await validator.ValidateAndThrowAsync(request, cancellationToken);
         
-        bool usernameExists = await _db.Profiles.AnyAsync(p => p.Username == request.Username, cancellationToken);
+        bool usernameExists = await db.Profiles.AnyAsync(p => p.Username == request.Username, cancellationToken);
         if (usernameExists)
             throw new ConflictException("Username already in use");
 
@@ -35,8 +26,8 @@ public class CreateProfileHandler : IRequestHandler<CreateProfileCommand, long>
             CreatedAt = DateTime.UtcNow
         };
 
-        _db.Profiles.Add(profile);
-        await _db.SaveChangesAsync(cancellationToken);
+        db.Profiles.Add(profile);
+        await db.SaveChangesAsync(cancellationToken);
 
         return profile.Id;
     }

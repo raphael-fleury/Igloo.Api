@@ -7,24 +7,13 @@ using Igloo.Infrastructure.Persistence;
 using Igloo.Infrastructure.Services;
 using FluentValidation;
 
-public class LoginHandler : IRequestHandler<LoginCommand, LoginResponse>
+public class LoginHandler(IglooDbContext db, IValidator<LoginCommand> validator, IJwtService jwtService) : IRequestHandler<LoginCommand, LoginResponse>
 {
-    private readonly IglooDbContext _db;
-    private readonly IValidator<LoginCommand> _validator;
-    private readonly IJwtService _jwtService;
-
-    public LoginHandler(IglooDbContext db, IValidator<LoginCommand> validator, IJwtService jwtService)
-    {
-        _db = db;
-        _validator = validator;
-        _jwtService = jwtService;
-    }
-
     public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        await _validator.ValidateAndThrowAsync(request, cancellationToken);
+        await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-        var user = await _db.Users
+        var user = await db.Users
             .Include(u => u.UserProfiles)
             .ThenInclude(up => up.Profile)
             .FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
@@ -41,8 +30,8 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResponse>
             .OrderBy(up => up.Profile.CreatedAt)
             .FirstOrDefault();
 
-        var token = _jwtService.GenerateToken(user.Id, user.Email, defaultProfile?.ProfileId);
-        var refreshToken = _jwtService.GenerateRefreshToken();
+    var token = jwtService.GenerateToken(user.Id, user.Email, defaultProfile?.ProfileId);
+    var refreshToken = jwtService.GenerateRefreshToken();
         var expiresAt = DateTime.UtcNow.AddMinutes(60);
 
         return new LoginResponse(

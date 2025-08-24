@@ -6,32 +6,25 @@ using Igloo.Infrastructure.Persistence;
 using System.Security.Claims;
 using AutoMapper;
 
-public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserQuery, CurrentUserResponse?>
+public class GetCurrentUserHandler(
+    IglooDbContext db,
+    IHttpContextAccessor httpContextAccessor,
+    IMapper mapper
+) : IRequestHandler<GetCurrentUserQuery, CurrentUserResponse?>
 {
-    private readonly IglooDbContext _db;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IMapper _mapper;
-
-    public GetCurrentUserHandler(IglooDbContext db, IHttpContextAccessor httpContextAccessor, IMapper mapper)
-    {
-        _db = db;
-        _httpContextAccessor = httpContextAccessor;
-        _mapper = mapper;
-    }
-
     public async Task<CurrentUserResponse?> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
     {
-        var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier);
+        var userIdClaim = httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier);
         
         if (userIdClaim == null || !long.TryParse(userIdClaim.Value, out var userId))
             return null;
 
-        var user = await _db.Users
+        var user = await db.Users
             .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
 
         if (user == null)
             return null;
 
-        return _mapper.Map<CurrentUserResponse>(user);
+        return mapper.Map<CurrentUserResponse>(user);
     }
-} 
+}
